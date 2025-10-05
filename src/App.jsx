@@ -4,11 +4,11 @@ import EnhancedOGIDemo from './components/EnhancedOGIDemo';
 import PracticalDemo from './components/PracticalDemo';
 
 function App() {
-  const [mode, setMode] = useState('practical'); // Start with practical demo
+  const [mode, setMode] = useState('practical');
 
   return (
     <div className="min-h-screen">
-      {/* Mode Toggle - Floating at top */}
+      {/* Mode Toggle */}
       <div className="fixed top-4 right-4 z-50 flex gap-2 bg-white rounded-lg shadow-lg p-2 border border-gray-200">
         <button
           onClick={() => setMode('practical')}
@@ -34,7 +34,6 @@ function App() {
         </button>
       </div>
 
-      {/* Render appropriate component */}
       {mode === 'practical' ? <PracticalDemo /> : <EnhancedOGIDemo />}
     </div>
   );
