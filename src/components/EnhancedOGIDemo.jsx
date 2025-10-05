@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { BookOpen, Zap } from 'lucide-react';
-import EnhancedOGIDemo from './components/EnhancedOGIDemo';
-import PracticalDemo from './components/PracticalDemo';
+import React, { useState, useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, ... } from 'recharts';
+import { AlertCircle, CheckCircle, BookOpen, Github, Mail, Download } from 'lucide-react';
+
+const EnhancedOGIDemo = () => {
 
 function App() {
   const [mode, setMode] = useState('practical'); // Start with practical demo
