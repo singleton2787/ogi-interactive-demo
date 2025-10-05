@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Zap, Brain, Clock, Cpu, CheckCircle, AlertCircle } from 'lucide-react';
 
-const OGIPracticalDemo = () => {
+const PracticalDemo = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
   const [processTime, setProcessTime] = useState({ traditional: 0, ogi: 0 });
 
-  // Define available modules
   const modules = [
     { id: 1, name: 'Vision', icon: '👁️', color: 'bg-blue-500' },
     { id: 2, name: 'Language', icon: '💬', color: 'bg-green-500' },
@@ -21,7 +20,6 @@ const OGIPracticalDemo = () => {
     { id: 10, name: 'Memory', icon: '🧠', color: 'bg-teal-500' }
   ];
 
-  // Sample tasks
   const tasks = [
     {
       id: 1,
@@ -69,13 +67,11 @@ const OGIPracticalDemo = () => {
     const n = modules.length;
     const k = task.activeModules.length;
     
-    // Traditional O(n²) - all modules communicate
     const traditionalConnections = n * (n - 1);
-    const traditionalOps = traditionalConnections * 100; // message size factor
+    const traditionalOps = traditionalConnections * 100;
     
-    // OGI O(k²+n) - only k modules communicate + attention computation
     const ogiActiveConnections = k * (k - 1);
-    const ogiAttentionOps = n * 50; // attention computation
+    const ogiAttentionOps = n * 50;
     const ogiOps = (ogiActiveConnections * 100) + ogiAttentionOps;
     
     const reduction = ((traditionalOps - ogiOps) / traditionalOps * 100).toFixed(1);
@@ -104,17 +100,14 @@ const OGIPracticalDemo = () => {
 
     const metrics = calculateMetrics(task);
     
-    // Simulate processing with realistic timing
     const traditionalTime = metrics.traditional.operations / 100;
     const ogiTime = metrics.ogi.operations / 100;
 
-    // Animate traditional approach
     await new Promise(resolve => setTimeout(resolve, 500));
     setProcessTime(prev => ({ ...prev, traditional: traditionalTime }));
     
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    // Animate OGI approach
     setProcessTime(prev => ({ ...prev, ogi: ogiTime }));
     
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -157,7 +150,6 @@ const OGIPracticalDemo = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-6">
       <div className="max-w-7xl mx-auto">
         
-        {/* Header */}
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Brain className="w-12 h-12 text-purple-400" />
@@ -171,7 +163,6 @@ const OGIPracticalDemo = () => {
           </p>
         </header>
 
-        {/* Task Selection */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {tasks.map(task => (
             <button
@@ -200,7 +191,6 @@ const OGIPracticalDemo = () => {
           ))}
         </div>
 
-        {/* Visualization */}
         {selectedTask && (
           <div className="bg-slate-800 rounded-2xl p-8 mb-8 border border-purple-500/30">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
@@ -208,7 +198,6 @@ const OGIPracticalDemo = () => {
               Module Activation: {selectedTask.title}
             </h2>
 
-            {/* Module Grid */}
             <div className="grid grid-cols-5 gap-4 mb-8">
               {modules.map((module, idx) => (
                 <ModuleNode
@@ -220,7 +209,6 @@ const OGIPracticalDemo = () => {
               ))}
             </div>
 
-            {/* Task Details */}
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="bg-slate-700/50 p-4 rounded-lg">
                 <div className="text-sm text-gray-400 mb-1">Input</div>
@@ -234,13 +222,11 @@ const OGIPracticalDemo = () => {
           </div>
         )}
 
-        {/* Comparison */}
         {metrics && showComparison && (
           <div className="bg-slate-800 rounded-2xl p-8 border border-purple-500/30">
             <h2 className="text-2xl font-bold mb-6">Performance Comparison</h2>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Traditional */}
               <div className="bg-red-900/20 border-2 border-red-500 rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <AlertCircle className="w-6 h-6 text-red-400" />
@@ -270,7 +256,6 @@ const OGIPracticalDemo = () => {
                 </div>
               </div>
 
-              {/* OGI */}
               <div className="bg-green-900/20 border-2 border-green-500 rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <CheckCircle className="w-6 h-6 text-green-400" />
@@ -302,7 +287,6 @@ const OGIPracticalDemo = () => {
               </div>
             </div>
 
-            {/* Metrics */}
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-purple-500/20 rounded-lg p-6 text-center border border-purple-500/50">
                 <Cpu className="w-8 h-8 mx-auto mb-2 text-purple-400" />
@@ -325,7 +309,6 @@ const OGIPracticalDemo = () => {
           </div>
         )}
 
-        {/* Footer */}
         <footer className="text-center mt-12 text-gray-400 text-sm">
           <p>OGI Framework: Proving AGI is computationally feasible through selective attention</p>
           <p className="mt-2">
@@ -339,4 +322,4 @@ const OGIPracticalDemo = () => {
   );
 };
 
-export default OGIPracticalDemo;
+export default PracticalDemo;
