@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
-
+import WorstCaseSection from './WorstCaseSection';
 // Simple Slider Component
 const Slider = ({ label, min, max, step, value, onChange }) => (
   <div style={{ margin: '20px 0' }}>
