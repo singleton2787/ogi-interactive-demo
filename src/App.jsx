@@ -9,7 +9,7 @@ const EnhancedOGIDemo = () => {
   const [kActive, setKActive] = useState(5);
   const [nModules, setNModules] = useState(50);
   const [showTooltip, setShowTooltip] = useState(null);
-
+ 
   // Math constants
   const L_THEORETICAL = 0.53;
   const DM_MESSAGE = 100;
