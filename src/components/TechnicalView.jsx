@@ -195,6 +195,7 @@ const TechnicalView = () => {
                     <li><strong>Trade-off:</strong> Adjust K to balance between computational efficiency and system expressiveness.</li>
                 </ul>
             </div>
+          
         </div>
     );
 };
