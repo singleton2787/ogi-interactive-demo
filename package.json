@@ -15,7 +15,7 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "recharts": "^3.2.1"
+    "recharts": "^3.2.1",
     "lucide-react": "^0.300.0"
   },
   "devDependencies": {
