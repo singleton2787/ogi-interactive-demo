@@ -11,7 +11,7 @@ This repository contains implementation code and validation experiments for the 
 ### 1. Lipschitz Stability Validation (Theorem 1)
 Empirically verifies that the dynamic weighting function Φ(c, et) maintains L2-norm stability against bounded perturbations.
 ```python
-python experiments/stability_test.py
+python experiments/stability_test.py 
 Expected Output:
 
 Theoretical Lipschitz constant L
