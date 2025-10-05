@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Zap, Brain, Clock, Cpu, CheckCircle, AlertCircle } from 'lucide-react';
+import { Play, Zap, Brain, Clock, Cpu, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
-const OGIPracticalDemo = () => {
+const PracticalDemo = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
-  const [processTime, setProcessTime] = useState({ traditional: 0, ogi: 0 });
+  const [animationPhase, setAnimationPhase] = useState('idle');
 
-  // Define available modules
   const modules = [
-    { id: 1, name: 'Vision', icon: '👁️', color: 'bg-blue-500' },
-    { id: 2, name: 'Language', icon: '💬', color: 'bg-green-500' },
-    { id: 3, name: 'Code', icon: '💻', color: 'bg-purple-500' },
-    { id: 4, name: 'Math', icon: '🔢', color: 'bg-red-500' },
-    { id: 5, name: 'Data', icon: '📊', color: 'bg-yellow-500' },
-    { id: 6, name: 'Email', icon: '📧', color: 'bg-pink-500' },
-    { id: 7, name: 'Calendar', icon: '📅', color: 'bg-indigo-500' },
-    { id: 8, name: 'Search', icon: '🔍', color: 'bg-cyan-500' },
-    { id: 9, name: 'Audio', icon: '🎵', color: 'bg-orange-500' },
-    { id: 10, name: 'Memory', icon: '🧠', color: 'bg-teal-500' }
+    { id: 1, name: 'Vision', icon: '👁️', color: 'bg-blue-500', borderColor: 'border-blue-400' },
+    { id: 2, name: 'Language', icon: '💬', color: 'bg-green-500', borderColor: 'border-green-400' },
+    { id: 3, name: 'Code', icon: '💻', color: 'bg-purple-500', borderColor: 'border-purple-400' },
+    { id: 4, name: 'Math', icon: '🔢', color: 'bg-red-500', borderColor: 'border-red-400' },
+    { id: 5, name: 'Data', icon: '📊', color: 'bg-yellow-500', borderColor: 'border-yellow-400' },
+    { id: 6, name: 'Email', icon: '📧', color: 'bg-pink-500', borderColor: 'border-pink-400' },
+    { id: 7, name: 'Calendar', icon: '📅', color: 'bg-indigo-500', borderColor: 'border-indigo-400' },
+    { id: 8, name: 'Search', icon: '🔍', color: 'bg-cyan-500', borderColor: 'border-cyan-400' },
+    { id: 9, name: 'Audio', icon: '🎵', color: 'bg-orange-500', borderColor: 'border-orange-400' },
+    { id: 10, name: 'Memory', icon: '🧠', color: 'bg-teal-500', borderColor: 'border-teal-400' }
   ];
 
-  // Sample tasks
   const tasks = [
     {
       id: 1,
@@ -29,39 +27,44 @@ const OGIPracticalDemo = () => {
       description: 'Parse CSV, create chart, email to team',
       activeModules: [2, 5, 6],
       input: 'sales_q4.csv',
-      output: 'Generated chart and sent email to 5 team members'
+      output: 'Chart generated and emailed to 5 team members',
+      emoji: '📊'
     },
     {
       id: 2,
-      title: 'Code Review Assistant',
-      description: 'Review code, suggest improvements, update documentation',
+      title: 'Code Review',
+      description: 'Review code, suggest fixes, update docs',
       activeModules: [2, 3, 10],
       input: 'pull_request_#234.py',
-      output: 'Found 3 issues, suggested fixes, updated README.md'
+      output: 'Found 3 issues, suggested fixes, updated README',
+      emoji: '💻'
     },
     {
       id: 3,
-      title: 'Meeting Preparation',
-      description: 'Check calendar, search past notes, draft agenda',
+      title: 'Meeting Prep',
+      description: 'Check calendar, search notes, draft agenda',
       activeModules: [2, 7, 8, 10],
-      input: 'Tomorrow\'s product review meeting',
-      output: 'Agenda created with 4 topics from previous 3 meetings'
+      input: "Tomorrow's product review",
+      output: 'Agenda created with 4 topics from past meetings',
+      emoji: '📅'
     },
     {
       id: 4,
-      title: 'Image Analysis Report',
-      description: 'Analyze images, extract data, create summary',
+      title: 'Image Analysis',
+      description: 'Analyze images, extract data, create report',
       activeModules: [1, 2, 4, 5],
-      input: 'lab_results/*.jpg (15 images)',
-      output: 'Extracted measurements, statistical analysis, PDF report'
+      input: '15 lab result images',
+      output: 'Measurements extracted, stats analyzed, PDF created',
+      emoji: '🔬'
     },
     {
       id: 5,
-      title: 'Multi-Modal Learning',
-      description: 'Process video lecture, transcribe, summarize, quiz',
+      title: 'Video Learning',
+      description: 'Transcribe lecture, summarize, create quiz',
       activeModules: [1, 2, 9, 10],
-      input: 'lecture_video.mp4 (45 minutes)',
-      output: 'Transcript, 5-point summary, 10 quiz questions'
+      input: '45-minute lecture video',
+      output: 'Transcript, 5-point summary, 10 quiz questions',
+      emoji: '🎓'
     }
   ];
 
@@ -69,13 +72,11 @@ const OGIPracticalDemo = () => {
     const n = modules.length;
     const k = task.activeModules.length;
     
-    // Traditional O(n²) - all modules communicate
     const traditionalConnections = n * (n - 1);
-    const traditionalOps = traditionalConnections * 100; // message size factor
+    const traditionalOps = traditionalConnections * 100;
     
-    // OGI O(k²+n) - only k modules communicate + attention computation
     const ogiActiveConnections = k * (k - 1);
-    const ogiAttentionOps = n * 50; // attention computation
+    const ogiAttentionOps = n * 50;
     const ogiOps = (ogiActiveConnections * 100) + ogiAttentionOps;
     
     const reduction = ((traditionalOps - ogiOps) / traditionalOps * 100).toFixed(1);
@@ -84,12 +85,10 @@ const OGIPracticalDemo = () => {
       traditional: {
         connections: traditionalConnections,
         operations: traditionalOps,
-        complexity: `O(n²) = O(${n}²) = ${traditionalConnections}`
       },
       ogi: {
         connections: ogiActiveConnections,
         operations: ogiOps,
-        complexity: `O(k²+n) = O(${k}²+${n}) = ${ogiActiveConnections + n}`,
         activeModules: k
       },
       reduction,
@@ -101,28 +100,18 @@ const OGIPracticalDemo = () => {
     setSelectedTask(task);
     setIsProcessing(true);
     setShowComparison(false);
+    setAnimationPhase('selecting');
 
-    const metrics = calculateMetrics(task);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setAnimationPhase('processing');
     
-    // Simulate processing with realistic timing
-    const traditionalTime = metrics.traditional.operations / 100;
-    const ogiTime = metrics.ogi.operations / 100;
-
-    // Animate traditional approach
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setProcessTime(prev => ({ ...prev, traditional: traditionalTime }));
-    
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    // Animate OGI approach
-    setProcessTime(prev => ({ ...prev, ogi: ogiTime }));
-    
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setAnimationPhase('complete');
     setShowComparison(true);
     setIsProcessing(false);
   };
 
-  const ModuleNode = ({ module, isActive, delay }) => {
+  const ModuleCard = ({ module, isActive, delay }) => {
     const [show, setShow] = useState(false);
     
     useEffect(() => {
@@ -133,19 +122,22 @@ const OGIPracticalDemo = () => {
     return (
       <div 
         className={`
-          relative p-4 rounded-lg border-2 transition-all duration-500
-          ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
+          relative p-6 rounded-xl border-2 transition-all duration-700
+          ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}
           ${isActive 
-            ? `${module.color} border-white text-white shadow-lg` 
-            : 'bg-gray-100 border-gray-300 text-gray-400'}
+            ? `${module.color} ${module.borderColor} border-4 text-white shadow-2xl scale-110` 
+            : 'bg-slate-700/30 border-slate-600 text-gray-500'}
         `}
       >
-        <div className="text-3xl mb-1">{module.icon}</div>
-        <div className="text-xs font-semibold">{module.name}</div>
+        <div className="text-4xl mb-2 text-center">{module.icon}</div>
+        <div className="text-sm font-bold text-center">{module.name}</div>
         {isActive && (
-          <div className="absolute -top-1 -right-1">
-            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-          </div>
+          <>
+            <div className="absolute -top-2 -right-2">
+              <div className="w-5 h-5 bg-green-400 rounded-full animate-pulse border-2 border-white"></div>
+            </div>
+            <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse"></div>
+          </>
         )}
       </div>
     );
@@ -154,189 +146,230 @@ const OGIPracticalDemo = () => {
   const metrics = selectedTask ? calculateMetrics(selectedTask) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+      <div className="max-w-7xl mx-auto p-6">
         
-        {/* Header */}
-        <header className="text-center mb-12">
+        <header className="text-center mb-8 pt-20">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Brain className="w-12 h-12 text-purple-400" />
-            <h1 className="text-4xl font-bold">OGI Framework</h1>
+            <Brain className="w-16 h-16 text-purple-400 animate-pulse" />
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              OGI Framework
+            </h1>
           </div>
-          <p className="text-xl text-purple-200">
-            Practical Multi-Modal AI Assistant Demo
+          <p className="text-2xl text-purple-200 mb-2">
+            See AGI Efficiency in Action
           </p>
-          <p className="text-sm text-gray-400 mt-2">
-            Demonstrating O(k²+n) efficiency vs traditional O(n²) approaches
+          <p className="text-gray-400">
+            Watch how selective attention reduces computational cost by up to 90%
           </p>
         </header>
 
         {/* Task Selection */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {tasks.map(task => (
-            <button
-              key={task.id}
-              onClick={() => runTask(task)}
-              disabled={isProcessing}
-              className={`
-                p-6 rounded-xl text-left transition-all
-                ${selectedTask?.id === task.id 
-                  ? 'bg-purple-600 shadow-xl scale-105' 
-                  : 'bg-slate-800 hover:bg-slate-700'}
-                ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                border border-purple-500/30
-              `}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <h3 className="font-bold text-lg">{task.title}</h3>
-                <Play className="w-5 h-5 text-purple-400" />
-              </div>
-              <p className="text-sm text-gray-300 mb-3">{task.description}</p>
-              <div className="flex items-center gap-2 text-xs text-purple-300">
-                <Zap className="w-4 h-4" />
-                <span>{task.activeModules.length} of {modules.length} modules active</span>
-              </div>
-            </button>
-          ))}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-4 text-center">Choose a Task to Run</h2>
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {tasks.map(task => (
+              <button
+                key={task.id}
+                onClick={() => runTask(task)}
+                disabled={isProcessing}
+                className={`
+                  p-6 rounded-2xl text-left transition-all transform
+                  ${selectedTask?.id === task.id 
+                    ? 'bg-gradient-to-br from-purple-600 to-pink-600 shadow-2xl scale-105 ring-4 ring-purple-400' 
+                    : 'bg-slate-800/50 hover:bg-slate-700/50 hover:scale-105'}
+                  ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-xl'}
+                  border border-purple-500/30
+                `}
+              >
+                <div className="text-4xl mb-3 text-center">{task.emoji}</div>
+                <h3 className="font-bold text-lg mb-2 text-center">{task.title}</h3>
+                <p className="text-xs text-gray-300 text-center mb-3">{task.description}</p>
+                <div className="flex items-center justify-center gap-2 text-xs text-purple-300">
+                  <Zap className="w-4 h-4" />
+                  <span className="font-semibold">{task.activeModules.length}/{modules.length} modules</span>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Visualization */}
+        {/* Module Visualization */}
         {selectedTask && (
-          <div className="bg-slate-800 rounded-2xl p-8 mb-8 border border-purple-500/30">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Brain className="w-6 h-6 text-purple-400" />
-              Module Activation: {selectedTask.title}
-            </h2>
+          <div className="bg-slate-800/50 backdrop-blur rounded-3xl p-8 mb-8 border border-purple-500/30 shadow-2xl">
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-3xl font-bold flex items-center gap-3">
+                  <span className="text-4xl">{selectedTask.emoji}</span>
+                  {selectedTask.title}
+                </h2>
+                {animationPhase !== 'idle' && (
+                  <div className="flex items-center gap-2 text-lg">
+                    {animationPhase === 'selecting' && (
+                      <span className="text-yellow-400 animate-pulse">⚡ Selecting modules...</span>
+                    )}
+                    {animationPhase === 'processing' && (
+                      <span className="text-blue-400 animate-pulse">🔄 Processing...</span>
+                    )}
+                    {animationPhase === 'complete' && (
+                      <span className="text-green-400">✅ Complete!</span>
+                    )}
+                  </div>
+                )}
+              </div>
 
-            {/* Module Grid */}
-            <div className="grid grid-cols-5 gap-4 mb-8">
-              {modules.map((module, idx) => (
-                <ModuleNode
-                  key={module.id}
-                  module={module}
-                  isActive={selectedTask.activeModules.includes(module.id)}
-                  delay={idx * 50}
-                />
-              ))}
+              <div className="bg-purple-900/30 rounded-xl p-4 mb-6">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-sm text-gray-400 mb-1">Input</div>
+                    <div className="font-mono text-white bg-slate-900/50 p-3 rounded-lg">
+                      {selectedTask.input}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400 mb-1">Output</div>
+                    <div className="font-mono text-white bg-slate-900/50 p-3 rounded-lg">
+                      {selectedTask.output}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Task Details */}
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
-              <div className="bg-slate-700/50 p-4 rounded-lg">
-                <div className="text-sm text-gray-400 mb-1">Input</div>
-                <div className="font-mono text-sm">{selectedTask.input}</div>
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold">Active Modules</h3>
+                <div className="text-sm bg-purple-600 px-4 py-2 rounded-lg font-semibold">
+                  Only {selectedTask.activeModules.length} of {modules.length} modules needed
+                </div>
               </div>
-              <div className="bg-slate-700/50 p-4 rounded-lg">
-                <div className="text-sm text-gray-400 mb-1">Output</div>
-                <div className="font-mono text-sm">{selectedTask.output}</div>
+              
+              <div className="grid grid-cols-5 gap-4">
+                {modules.map((module, idx) => (
+                  <ModuleCard
+                    key={module.id}
+                    module={module}
+                    isActive={selectedTask.activeModules.includes(module.id)}
+                    delay={idx * 80}
+                  />
+                ))}
               </div>
             </div>
           </div>
         )}
 
-        {/* Comparison */}
+        {/* Performance Comparison */}
         {metrics && showComparison && (
-          <div className="bg-slate-800 rounded-2xl p-8 border border-purple-500/30">
-            <h2 className="text-2xl font-bold mb-6">Performance Comparison</h2>
+          <div className="bg-slate-800/50 backdrop-blur rounded-3xl p-8 border border-purple-500/30 shadow-2xl">
+            <h2 className="text-3xl font-bold mb-8 text-center">
+              The Efficiency Breakthrough
+            </h2>
 
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
               {/* Traditional */}
-              <div className="bg-red-900/20 border-2 border-red-500 rounded-xl p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <AlertCircle className="w-6 h-6 text-red-400" />
-                  <h3 className="text-xl font-bold">Traditional (Full Mesh)</h3>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <div className="text-sm text-gray-400">Complexity</div>
-                    <div className="text-lg font-mono text-red-400">{metrics.traditional.complexity}</div>
+              <div className="bg-gradient-to-br from-red-900/40 to-red-800/40 border-2 border-red-500 rounded-2xl p-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 text-9xl opacity-10">⚠️</div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <AlertCircle className="w-8 h-8 text-red-400" />
+                    <h3 className="text-2xl font-bold">Traditional AI</h3>
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-400">Connections</div>
-                    <div className="text-2xl font-bold">{metrics.traditional.connections}</div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-red-950/50 rounded-lg p-4">
+                      <div className="text-sm text-red-300 mb-1">All Modules Connected</div>
+                      <div className="text-4xl font-bold text-red-400">{metrics.traditional.connections}</div>
+                      <div className="text-xs text-red-300">connections required</div>
+                    </div>
+                    
+                    <div className="bg-red-950/50 rounded-lg p-4">
+                      <div className="text-sm text-red-300 mb-1">Total Operations</div>
+                      <div className="text-4xl font-bold text-red-400">
+                        {metrics.traditional.operations.toLocaleString()}
+                      </div>
+                      <div className="text-xs text-red-300">computational cost</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-400">Operations</div>
-                    <div className="text-2xl font-bold">{metrics.traditional.operations.toLocaleString()}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-400">Processing Time</div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <div className="text-xl font-bold">{processTime.traditional.toFixed(1)}ms</div>
+
+                  <div className="mt-6 p-4 bg-red-950/50 rounded-lg border-l-4 border-red-500">
+                    <div className="text-sm font-semibold text-red-300">
+                      ❌ Exponential scaling = Requires data center
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* OGI */}
-              <div className="bg-green-900/20 border-2 border-green-500 rounded-xl p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <CheckCircle className="w-6 h-6 text-green-400" />
-                  <h3 className="text-xl font-bold">OGI (Top-K Gating)</h3>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <div className="text-sm text-gray-400">Complexity</div>
-                    <div className="text-lg font-mono text-green-400">{metrics.ogi.complexity}</div>
+              <div className="bg-gradient-to-br from-green-900/40 to-emerald-800/40 border-2 border-green-500 rounded-2xl p-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 text-9xl opacity-10">✨</div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <CheckCircle className="w-8 h-8 text-green-400" />
+                    <h3 className="text-2xl font-bold">OGI Framework</h3>
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-400">Active Connections</div>
-                    <div className="text-2xl font-bold">{metrics.ogi.connections}</div>
-                    <div className="text-xs text-gray-400">({metrics.ogi.activeModules} modules)</div>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-green-950/50 rounded-lg p-4">
+                      <div className="text-sm text-green-300 mb-1">Active Connections Only</div>
+                      <div className="text-4xl font-bold text-green-400">{metrics.ogi.connections}</div>
+                      <div className="text-xs text-green-300">
+                        ({metrics.ogi.activeModules} modules communicating)
+                      </div>
+                    </div>
+                    
+                    <div className="bg-green-950/50 rounded-lg p-4">
+                      <div className="text-sm text-green-300 mb-1">Total Operations</div>
+                      <div className="text-4xl font-bold text-green-400">
+                        {metrics.ogi.operations.toLocaleString()}
+                      </div>
+                      <div className="text-xs text-green-300">computational cost</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-400">Operations</div>
-                    <div className="text-2xl font-bold">{metrics.ogi.operations.toLocaleString()}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-400">Processing Time</div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <div className="text-xl font-bold">{processTime.ogi.toFixed(1)}ms</div>
+
+                  <div className="mt-6 p-4 bg-green-950/50 rounded-lg border-l-4 border-green-500">
+                    <div className="text-sm font-semibold text-green-300">
+                      ✅ Linear scaling = Runs on single workstation
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Metrics */}
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-purple-500/20 rounded-lg p-6 text-center border border-purple-500/50">
-                <Cpu className="w-8 h-8 mx-auto mb-2 text-purple-400" />
-                <div className="text-3xl font-bold text-purple-400">{metrics.reduction}%</div>
-                <div className="text-sm text-gray-300">Computational Reduction</div>
+            {/* Bottom Metrics */}
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+                <Cpu className="w-12 h-12 mx-auto mb-3 text-purple-200" />
+                <div className="text-5xl font-bold mb-2">{metrics.reduction}%</div>
+                <div className="text-purple-200">Cost Reduction</div>
               </div>
-              <div className="bg-blue-500/20 rounded-lg p-6 text-center border border-blue-500/50">
-                <Zap className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-                <div className="text-3xl font-bold text-blue-400">{metrics.speedup}x</div>
-                <div className="text-sm text-gray-300">Speedup Factor</div>
+              
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+                <Zap className="w-12 h-12 mx-auto mb-3 text-blue-200" />
+                <div className="text-5xl font-bold mb-2">{metrics.speedup}x</div>
+                <div className="text-blue-200">Faster</div>
               </div>
-              <div className="bg-green-500/20 rounded-lg p-6 text-center border border-green-500/50">
-                <CheckCircle className="w-8 h-8 mx-auto mb-2 text-green-400" />
-                <div className="text-3xl font-bold text-green-400">
-                  {metrics.ogi.activeModules}/{modules.length}
-                </div>
-                <div className="text-sm text-gray-300">Modules Active</div>
+              
+              <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+                <CheckCircle className="w-12 h-12 mx-auto mb-3 text-green-200" />
+                <div className="text-5xl font-bold mb-2">{metrics.ogi.activeModules}/{modules.length}</div>
+                <div className="text-green-200">Modules Active</div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Footer */}
-        <footer className="text-center mt-12 text-gray-400 text-sm">
-          <p>OGI Framework: Proving AGI is computationally feasible through selective attention</p>
-          <p className="mt-2">
-            <a href="https://github.com/singleton2787/ogi-interactive-demo" className="text-purple-400 hover:underline">
-              View on GitHub
-            </a>
-          </p>
+        <footer className="text-center mt-12 text-gray-400">
+          <p className="mb-2">OGI Framework: Making AGI computationally feasible through selective attention</p>
+          <a 
+            href="https://github.com/singleton2787/ogi-interactive-demo" 
+            className="text-purple-400 hover:text-purple-300 underline"
+          >
+            View Source on GitHub
+          </a>
         </footer>
       </div>
     </div>
   );
 };
 
-export default OGIPracticalDemo;
+export default PracticalDemo;
