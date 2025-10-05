@@ -8,7 +8,6 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      {/* Mode Toggle */}
       <div className="fixed top-4 right-4 z-50 flex gap-2 bg-white rounded-lg shadow-lg p-2 border border-gray-200">
         <button
           onClick={() => setMode('practical')}
