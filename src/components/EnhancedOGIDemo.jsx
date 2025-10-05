@@ -554,8 +554,7 @@ const EnhancedOGIDemo = () => {
                 </div>
               </div>
 
-              <div className="
-                bg-gray-50 rounded-xl p-6 mb-6">
+              <div className="bg-gray-50 rounded-xl p-6 mb-6">
                 <h3 className="font-bold text-lg text-gray-900 mb-4">Comparison: OGI vs Current State-of-the-Art</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
